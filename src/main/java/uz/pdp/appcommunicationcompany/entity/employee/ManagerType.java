@@ -16,6 +16,6 @@ public class ManagerType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
-    private ManagerTypeEnum managerTypeEnum;
+    @Column(unique = true,nullable = false)
+    private String managerType;
 }

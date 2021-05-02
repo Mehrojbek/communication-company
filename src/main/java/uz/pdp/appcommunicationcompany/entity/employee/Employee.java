@@ -1,5 +1,6 @@
 package uz.pdp.appcommunicationcompany.entity.employee;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -47,8 +48,12 @@ public class Employee implements UserDetails {
     @ManyToOne
     private Branch branch;//agar bu xodim bo'lsa qaysi filial xodimi
 
-    @OneToOne(mappedBy = "employee")
+    @JsonIgnore
+    @OneToOne(mappedBy = "employee",cascade = CascadeType.PERSIST)
     private Turniket turniket;
+
+    @ManyToMany
+    private Set<Role> roles;
 
 
 
@@ -67,8 +72,7 @@ public class Employee implements UserDetails {
     @LastModifiedBy
     private UUID updatedBy;
 
-    @ManyToMany
-    private Set<Role> roles;
+
 
 
 

@@ -17,8 +17,9 @@ public class ServiceType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    //AVVAL ENUMDA BOR BO'LGAN TURLAR SAQLANADI KEYINCHALIK YANGI SERVICE TURLARI CRUD QILINADI
     @Column(unique = true,nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ServiceTypeEnum serviceType;
+    private String serviceType;
+
 
 }

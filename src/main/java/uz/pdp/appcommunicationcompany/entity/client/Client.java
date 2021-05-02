@@ -1,5 +1,6 @@
 package uz.pdp.appcommunicationcompany.entity.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +26,7 @@ import java.util.UUID;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Client implements UserDetails {
+public class Client{
     @Id
     @GeneratedValue
     private UUID id;
@@ -36,15 +37,13 @@ public class Client implements UserDetails {
     @Column(nullable = false,length = 50)
     private String lastName;
 
-    @Column(nullable = false,unique = true)
-    private String phoneNumber;
-
-    @Column(nullable = false)
-    private String password;
+    @Column(unique = true,nullable = false)
+    private String passport;               // BU CLIENT PASPORTI TIZIMDA UNIKAL USERNAME SIFATIDA KO'RILADI : AA1234567
 
     @ManyToOne
     private ClientType clientType;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "client")
     private List<SimCard> simCardList;
 
@@ -69,57 +68,5 @@ public class Client implements UserDetails {
 
 
 
-    @ManyToMany
-    private Set<Role> roles;
 
-
-
-
-
-    private boolean accountNonExpired=true;
-
-    private boolean accountNonLocked=true;
-
-    private boolean credentialsNonExpired=true;
-
-    private boolean enabled=true;
-
-
-
-
-
-
-
-
-
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
-    }
-
-    @Override
-    public String getUsername() {
-        return phoneNumber;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
 }

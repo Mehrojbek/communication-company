@@ -17,6 +17,8 @@ public class CpeciesType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
-    private CpeciesTypeEnum cpeciesType;
+    //BU STRING BO'LISHIGA SABAB QO'SHIMCHA ENUM DA MAVJUD BO'LMAGAN TURLAR QO'SHILISHI MUMKIN
+    @Column(unique = true)
+    private String cpeciesType;
+
 }

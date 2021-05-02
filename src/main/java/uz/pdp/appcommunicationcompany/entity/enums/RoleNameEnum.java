@@ -6,6 +6,6 @@ public enum RoleNameEnum {
     MANAGER,
     BRANCH_DIRECTOR,
     WORKER,
-    CLIENT,
-    PAYMENT
+    SIM_CARD,
+    PAYMENT_USER
 }

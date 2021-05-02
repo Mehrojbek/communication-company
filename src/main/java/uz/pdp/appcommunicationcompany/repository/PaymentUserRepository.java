@@ -4,8 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import uz.pdp.appcommunicationcompany.entity.client.ClientType;
 import uz.pdp.appcommunicationcompany.entity.payment.PaymentUser;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface PaymentUserRepository extends JpaRepository<PaymentUser, UUID> {
-
+    Optional<PaymentUser> findByUsername(String username);
 }

@@ -8,9 +8,11 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import uz.pdp.appcommunicationcompany.entity.ussd.UssdCode;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Set;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -18,16 +20,28 @@ import java.util.UUID;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class PackageForPlan {
-    //BU TARIF REJA UCHUN BERILUVCHI PAKET
+public class Service {
+    //QO'SHIMCHA SOTIB OLISH UCHUN XIZMAT
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer amount;//MIQDORI
+    private String name;//NOMI
 
-    @ManyToOne(optional = false)
-    private PackageType packageType;//PAKET TURI : MB, SMS, MINUTE
+    private Integer price;//NARXI
+
+    private Integer duration;//DAVOMIYLIGI
+
+    @ManyToOne
+    private ServiceType serviceType;//TURI
+
+    @OneToMany
+    private Set<UssdCode> ussdCode; //SHU SERVICE UCHUN USSD CODELAR UCHIRISH, YOQISH ,..VA HOKAZO
+
+
+
+
+
 
 
 
@@ -52,3 +66,7 @@ public class PackageForPlan {
     @LastModifiedBy
     private UUID updatedBy;
 }
+
+
+
+

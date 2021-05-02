@@ -1,7 +1,10 @@
 package uz.pdp.appcommunicationcompany.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,20 +15,28 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import uz.pdp.appcommunicationcompany.security.JwtFilter;
+import uz.pdp.appcommunicationcompany.service.AuthService;
 
 import java.util.Properties;
+import java.util.UUID;
 
 
 @EnableWebSecurity
-
+@EnableJpaAuditing
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final String EMAIL="yangi970599@gmail.com";
     private final String PASSWORD="mnbvcxZ970599";
 
+    @Autowired
+    AuthService authService;
+    @Autowired
+    JwtFilter jwtFilter;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        //auth.userDetailsService()
+        auth.userDetailsService(authService).passwordEncoder(passwordEncoder());
     }
 
 
@@ -46,8 +57,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated();
 
+        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
     }
 
 
@@ -73,5 +84,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+
+
+    @Bean
+    public AuditorAware<UUID> auditorAware(){
+        return new SecurityAuditingAware();
     }
 }

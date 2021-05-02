@@ -2,6 +2,7 @@ package uz.pdp.appcommunicationcompany.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import uz.pdp.appcommunicationcompany.entity.simcard.Code;
+import uz.pdp.appcommunicationcompany.entity.ussd.UssdCode;
 
-public interface CodeRepository extends JpaRepository<Code, Integer> {
+public interface UssdCodeRepository extends JpaRepository<UssdCode, Integer> {
 }

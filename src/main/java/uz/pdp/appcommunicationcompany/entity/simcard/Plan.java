@@ -44,11 +44,11 @@ public class Plan {
     @ManyToOne(optional = false)
     private ClientType clientType;//qaysi turdagi mijoz uchun
 
-    @ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
-    private Set<PackageForPlan> packages;//TARIF BO'YICHA BERILGAN PAKETLAR
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Package> packages;//TARIF BO'YICHA BERILGAN PAKETLAR
 
-    @ManyToMany
-    private Set<ServiceForPlan> services;//TARIF BO'YICHA BERILGAN XIZMATLAR
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Service> services;//TARIF BO'YICHA BERILGAN XIZMATLAR
 
 
 

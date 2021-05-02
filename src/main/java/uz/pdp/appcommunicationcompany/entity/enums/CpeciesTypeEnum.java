@@ -10,6 +10,7 @@ public enum CpeciesTypeEnum {
     MB_TELEGRAM,
     MB_INSTAGRAM,
     MB_FACEBOOK,
+    TIK_TOK,
     MB_TASIX;
 
     //BU YERDA JUDA KO'P MA'LUMOTLAR BO'LISHI MUMKIN

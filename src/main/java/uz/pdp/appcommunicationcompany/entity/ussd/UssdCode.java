@@ -1,4 +1,4 @@
-package uz.pdp.appcommunicationcompany.entity.simcard;
+package uz.pdp.appcommunicationcompany.entity.ussd;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,32 +18,19 @@ import java.util.UUID;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class PackageForBuy {
-    //BU QO'SHIMCHA SOTIB OLISH UCHUN PAKET
+public class UssdCode {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer amount;//MIQDORI
+    @Column(nullable = false,unique = true)
+    private String name;                //nomi
 
-    private Integer duration;//necha kunga berilishi
+    @Column(nullable = false)
+    private String description;         //umumiy ma'lumot
 
-    private Integer price;//NARXI
-
-    @ManyToOne(optional = false)
-    private PackageType packageType;//PAKET TURI : MB, SMS, MINUTE
-
-
-
-
-
-
-
-
-
-
-
-
+    @Column(unique = true,nullable = false)
+    private String ussdCode;            //code *102#
 
 
 
@@ -65,4 +52,5 @@ public class PackageForBuy {
 
     @LastModifiedBy
     private UUID updatedBy;
+
 }

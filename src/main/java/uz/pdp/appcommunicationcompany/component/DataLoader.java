@@ -17,6 +17,7 @@ import uz.pdp.appcommunicationcompany.entity.simcard.Code;
 import uz.pdp.appcommunicationcompany.entity.simcard.CpeciesType;
 import uz.pdp.appcommunicationcompany.entity.simcard.PackageType;
 import uz.pdp.appcommunicationcompany.entity.simcard.ServiceType;
+import uz.pdp.appcommunicationcompany.entity.ussd.UssdCode;
 import uz.pdp.appcommunicationcompany.repository.*;
 
 import java.util.*;
@@ -51,6 +52,8 @@ public class DataLoader implements CommandLineRunner {
     ManagerTypeRepository managerTypeRepository;
     @Autowired
     PackageTypeRepository packageTypeRepository;
+    @Autowired
+    UssdCodeRepository ussdCodeRepository;
 
 
     @Override
@@ -95,10 +98,10 @@ public class DataLoader implements CommandLineRunner {
             }
 
 
-            //SAVE SERVICE TYPE
+            //SAVE SERVICE TYPE //KEYINCHALIK BOSHQA SERVICE TURLARI HAM QO'SHILISHI MUMKIN MANAGER TOMONIDAN
             for (ServiceTypeEnum serviceTypeEnum : ServiceTypeEnum.values()) {
                 ServiceType serviceType = new ServiceType();
-                serviceType.setServiceType(serviceTypeEnum);
+                serviceType.setServiceType(serviceTypeEnum.name());
                 serviceTypeRepository.save(serviceType);
             }
 
@@ -118,7 +121,7 @@ public class DataLoader implements CommandLineRunner {
                 paymentSystemRepository.save(paymentSystem);
 
                 //SAVE PAYMENT USER
-                Role rolePayment = roleRepository.findByName(RoleNameEnum.PAYMENT);
+                Role rolePayment = roleRepository.findByName(RoleNameEnum.PAYMENT_USER);
 
                 PaymentUser paymentUser = new PaymentUser();
                 paymentUser.setUsername(paymentSystemEnum.name());
@@ -128,10 +131,10 @@ public class DataLoader implements CommandLineRunner {
             }
 
 
-            //SAVE CPECIES_TYPE SAVE
+            //SAVE CPECIES_TYPE SAVE //KEYINCHALIK BOSHQA TURLAR HAM QO'SHILISHI MUMKIN MANAGER TOMONIDAN
             for (CpeciesTypeEnum cpeciesTypeEnum : CpeciesTypeEnum.values()) {
                 CpeciesType cpeciesType = new CpeciesType();
-                cpeciesType.setCpeciesType(cpeciesTypeEnum);
+                cpeciesType.setCpeciesType(cpeciesTypeEnum.name());
 
                 CpeciesType savedCpeciesType = cpeciesTypeRepository.save(cpeciesType);
 
@@ -164,10 +167,22 @@ public class DataLoader implements CommandLineRunner {
             }
 
 
-            //SAVE MANAGER_TYPE
+            //SAVE ANY USSD CODE
+            for (BaseUssdEnum baseUssdEnum : BaseUssdEnum.values()) {
+                UssdCode ussdCode = new UssdCode();
+
+                ussdCode.setName(baseUssdEnum.name().toLowerCase());
+                ussdCode.setDescription(baseUssdEnum.name().toLowerCase());
+                ussdCode.setUssdCode(baseUssdEnum.getUssdCode());
+
+                ussdCodeRepository.save(ussdCode);
+            }
+
+
+            //SAVE MANAGER_TYPE //KEYINCHALIK BOSHQA MANAGER TURI HAM QO'SHILISHI MUMKIN
             for (ManagerTypeEnum managerTypeEnum : ManagerTypeEnum.values()) {
                 ManagerType managerType = new ManagerType();
-                managerType.setManagerTypeEnum(managerTypeEnum);
+                managerType.setManagerType(managerTypeEnum.name());
                 managerTypeRepository.save(managerType);
             }
 

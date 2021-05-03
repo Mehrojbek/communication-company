@@ -17,7 +17,7 @@ public class DefaultPrice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @OneToOne(mappedBy = "defaultPrice")
+    @ManyToOne
     private Plan plan;
 
     @ManyToOne(fetch = FetchType.LAZY,optional = false)

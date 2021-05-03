@@ -1,5 +1,4 @@
 package uz.pdp.appcommunicationcompany.entity.employee;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -42,14 +41,14 @@ public class Employee implements UserDetails {
 
     private String emailCode;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ManagerType managerType;//agar bu manager bo'lsa qaysi turdagi manager
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Branch branch;//agar bu xodim bo'lsa qaysi filial xodimi
 
     @JsonIgnore
-    @OneToOne(mappedBy = "employee",cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "employee")
     private Turniket turniket;
 
     @ManyToMany

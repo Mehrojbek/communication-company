@@ -1,5 +1,6 @@
 package uz.pdp.appcommunicationcompany.entity.simcard;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,25 +31,26 @@ public class Plan {
     private String name;//NOMI
 
     @Column(nullable = false)
-    private Integer switchPrice;//TARIFGA O'TISH NARXI
+    private Integer switchPrice;            //TARIFGA O'TISH NARXI
 
     @Column(nullable = false)
-    private Integer price;//NARXI
+    private Integer price;                  //NARXI
 
     @Column(nullable = false)
-    private Integer duration;//QANCHA VAQTGA MO'LJALLANGAN
+    private Integer duration;               //QANCHA VAQTGA MO'LJALLANGAN
 
-    @OneToOne(fetch = FetchType.LAZY,optional = false,cascade = CascadeType.ALL)
-    private DefaultPrice defaultPrice;//AGAR TERIF BO'YICHA BERILGAN PAKETLAR TUGASA DEFAULT NARXLAR
+    @JsonIgnore
+    @OneToMany(mappedBy = "plan",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Set<DefaultPrice> defaultPrices;//AGAR TARIF BO'YICHA BERILGAN PAKETLAR TUGASA DEFAULT NARXLAR
 
-    @ManyToOne(optional = false)
-    private ClientType clientType;//qaysi turdagi mijoz uchun
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Set<ClientType> clientType;     //QAYSI TURDAGI MIJOZ UCHUN
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Package> packages;//TARIF BO'YICHA BERILGAN PAKETLAR
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Set<PackageForPlan> packageForPlans;          //TARIF BO'YICHA BERILGAN PAKETLAR //OPTIONAL
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Service> services;//TARIF BO'YICHA BERILGAN XIZMATLAR
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Set<Service> services;          //TARIF BO'YICHA BERILGAN XIZMATLAR //OPTIONAL
 
 
 

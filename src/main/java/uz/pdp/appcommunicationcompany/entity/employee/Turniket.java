@@ -1,5 +1,6 @@
 package uz.pdp.appcommunicationcompany.entity.employee;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class Turniket {
     @Column(unique = true,nullable = false,updatable = false)
     private String cardNumber;//karta raqam
 
+    @JsonIgnore
     @OneToOne
     private Employee employee;//ishchi id si
 

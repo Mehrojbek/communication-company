@@ -20,6 +20,6 @@ public class Branch {
     @Column(unique = true)
     private String name;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private Region region;//filial regioni
 }

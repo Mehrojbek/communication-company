@@ -29,11 +29,6 @@ public class Payment {
     @ManyToOne(optional = false)
     private SimCard simCard;
 
-    @ManyToOne
-    private PaymentSystem paymentSystem;
-
-    @ManyToOne
-    private PaymentUser paymentUser;
 
 
 

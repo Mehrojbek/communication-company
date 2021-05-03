@@ -27,10 +27,13 @@ public class Package {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(nullable = false)
     private Integer amount;//MIQDORI
 
+    @Column(nullable = false)
     private Integer duration;//MUDDATI
 
+    @Column(nullable = false)
     private Integer price;//NARXI
 
     @ManyToOne(optional = false)

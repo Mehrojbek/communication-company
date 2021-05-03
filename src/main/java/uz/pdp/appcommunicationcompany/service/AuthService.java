@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import uz.pdp.appcommunicationcompany.component.UsefulMethods;
 import uz.pdp.appcommunicationcompany.entity.Role;
@@ -15,8 +16,6 @@ import uz.pdp.appcommunicationcompany.entity.employee.Employee;
 import uz.pdp.appcommunicationcompany.entity.employee.ManagerType;
 import uz.pdp.appcommunicationcompany.entity.employee.Turniket;
 import uz.pdp.appcommunicationcompany.entity.enums.RoleNameEnum;
-import uz.pdp.appcommunicationcompany.entity.payment.PaymentUser;
-import uz.pdp.appcommunicationcompany.entity.simcard.SimCard;
 import uz.pdp.appcommunicationcompany.payload.ApiResponse;
 import uz.pdp.appcommunicationcompany.payload.LoginDto;
 import uz.pdp.appcommunicationcompany.payload.RegisterDto;
@@ -46,9 +45,9 @@ public class AuthService implements UserDetailsService {
     @Autowired
     SimCardRepository simCardRepository;
     @Autowired
-    PaymentUserRepository paymentUserRepository;
-    @Autowired
     JwtProvider jwtProvider;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     //REGISTER
     public ApiResponse register(RegisterDto registerDto){
@@ -122,7 +121,7 @@ public class AuthService implements UserDetailsService {
         employee.setFirstName(registerDto.getFirstName());
         employee.setLastName(registerDto.getLastName());
         employee.setEmail(registerDto.getEmail());
-        employee.setPassword(registerDto.getPassword());
+        employee.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         employee.setEmailCode(UUID.randomUUID().toString());
 
         //SET BRANCH
@@ -139,7 +138,7 @@ public class AuthService implements UserDetailsService {
         //SET MANAGER_TYPE
         if (roleNameEnum.equals(RoleNameEnum.MANAGER)){
             if (registerDto.getManagerType() == null)
-                return new ApiResponse("manager turi bo'sh bo;lmasligi kerak",false);
+                return new ApiResponse("manager turi bo'sh bo'lmasligi kerak",false);
             Optional<ManagerType> optionalManagerType = managerTypeRepository.findById(registerDto.getManagerType());
             if (!optionalManagerType.isPresent())
                 return new ApiResponse("Manager turi topilmadi",false);
@@ -163,26 +162,14 @@ public class AuthService implements UserDetailsService {
         return new ApiResponse("Muvaffaqiyatli saqlandi",true);
     }
 
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return employeeRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
+    }
 
-        /**TIZIMGA 3 XIL USER KIRISHI MUMKIN : PAYMENT_USER, EMPLOYEE, SIM_CARD
-        SIMKARTADA UNIKAL FIELDI BU RAQAMI, PAYMENT_USERDA O'ZIMIZ KIRITGAN USERNAME, EMPLOYEE DA EMAIL
-        ULAR BIR-BIRIGA TENG BO'LISHI MUMKIN EMAS SABABI 1-SI RAQAM, 2-SI SO'Z, 3-SI EMAIL
-        TIZIMGA KIRMOQCHI BO'LGAN USER EMPLOYEE BO'LSA**/
-
-        Optional<Employee> optionalEmployee = employeeRepository.findByEmail(username);
-        if (optionalEmployee.isPresent())
-            return optionalEmployee.get();
-        //TIZIMGA KIRMOQCHI BO'LGAN USER SIM_CARD BO'LSA
-        Optional<SimCard> optionalSimCard = simCardRepository.findByNumber(username);
-        if (optionalSimCard.isPresent())
-            return optionalSimCard.get();
-        //TIZIMGA KIRMOQCHI BO'LGAN USER TO'LOV TIZIMI BO'LSA
-        Optional<PaymentUser> optionalPaymentUser = paymentUserRepository.findByUsername(username);
-        if (optionalPaymentUser.isPresent())
-            return optionalPaymentUser.get();
-        //XATOLIK
-        throw new UsernameNotFoundException(username);
+    public UserDetails loadUserByUsernameForSimCard(String username) throws UsernameNotFoundException {
+        return simCardRepository.findByNumber(username).orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }

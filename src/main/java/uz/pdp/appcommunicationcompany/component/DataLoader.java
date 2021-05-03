@@ -7,12 +7,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import uz.pdp.appcommunicationcompany.entity.Role;
 import uz.pdp.appcommunicationcompany.entity.client.ClientType;
+import uz.pdp.appcommunicationcompany.entity.employee.Branch;
 import uz.pdp.appcommunicationcompany.entity.employee.Employee;
 import uz.pdp.appcommunicationcompany.entity.employee.ManagerType;
 import uz.pdp.appcommunicationcompany.entity.employee.Region;
 import uz.pdp.appcommunicationcompany.entity.enums.*;
-import uz.pdp.appcommunicationcompany.entity.payment.PaymentSystem;
-import uz.pdp.appcommunicationcompany.entity.payment.PaymentUser;
 import uz.pdp.appcommunicationcompany.entity.simcard.Code;
 import uz.pdp.appcommunicationcompany.entity.simcard.CpeciesType;
 import uz.pdp.appcommunicationcompany.entity.simcard.PackageType;
@@ -20,6 +19,7 @@ import uz.pdp.appcommunicationcompany.entity.simcard.ServiceType;
 import uz.pdp.appcommunicationcompany.entity.ussd.UssdCode;
 import uz.pdp.appcommunicationcompany.repository.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Collections;
 
@@ -43,10 +43,6 @@ public class DataLoader implements CommandLineRunner {
     @Autowired
     ClientTypeRepository clientTypeRepository;
     @Autowired
-    PaymentSystemRepository paymentSystemRepository;
-    @Autowired
-    PaymentUserRepository paymentUserRepository;
-    @Autowired
     CpeciesTypeRepository cpeciesTypeRepository;
     @Autowired
     ManagerTypeRepository managerTypeRepository;
@@ -54,6 +50,8 @@ public class DataLoader implements CommandLineRunner {
     PackageTypeRepository packageTypeRepository;
     @Autowired
     UssdCodeRepository ussdCodeRepository;
+    @Autowired
+    BranchRepository branchRepository;
 
 
     @Override
@@ -80,14 +78,19 @@ public class DataLoader implements CommandLineRunner {
             employeeRepository.save(employee);
 
 
-            //SAVE REGIONS
-            List<Region> regions = new ArrayList<>();
+            //SAVE REGIONS AND BRANCH
+            List<Branch> branches = new ArrayList<>();
             for (RegionEnum regionName : RegionEnum.values()) {
                 Region region = new Region();
                 region.setName(regionName);
-                regions.add(region);
+
+                Branch branch = new Branch();
+                branch.setRegion(region);
+                branch.setName(regionName.name());
+                branches.add(branch);
             }
-            regionRepository.saveAll(regions);
+
+            branchRepository.saveAll(branches);
 
 
             //SAVE CODE
@@ -114,21 +117,46 @@ public class DataLoader implements CommandLineRunner {
             }
 
 
-            //SAVE PAYMENT SYSTEM
-            for (PaymentSystemEnum paymentSystemEnum : PaymentSystemEnum.values()) {
-                PaymentSystem paymentSystem = new PaymentSystem();
-                paymentSystem.setPaymentSystem(paymentSystemEnum);
-                paymentSystemRepository.save(paymentSystem);
 
-                //SAVE PAYMENT USER
+
+            //SAVE PAYMENT SYSTEM
+
                 Role rolePayment = roleRepository.findByName(RoleNameEnum.PAYMENT_USER);
 
-                PaymentUser paymentUser = new PaymentUser();
-                paymentUser.setUsername(paymentSystemEnum.name());
-                paymentUser.setPassword(passwordEncoder.encode(paymentSystemEnum.name()));
-                paymentUser.setRoles(Collections.singleton(rolePayment));
-                paymentUserRepository.save(paymentUser);
-            }
+                Employee oson = new Employee();
+                oson.setFirstName("OSON");
+                oson.setLastName("oson");
+                oson.setEmail("oson");
+                oson.setPassword(passwordEncoder.encode("oson"));
+                oson.setRoles(Collections.singleton(rolePayment));
+                oson.setEnabled(true);
+
+                employeeRepository.save(oson);
+
+
+                Employee paynet = new Employee();
+                paynet.setFirstName("Paynet");
+                paynet.setLastName("paynet");
+                paynet.setEmail("paynet");
+                paynet.setPassword(passwordEncoder.encode("paynet"));
+                paynet.setRoles(Collections.singleton(rolePayment));
+                paynet.setEnabled(true);
+
+                employeeRepository.save(paynet);
+
+
+                Employee payme = new Employee();
+                payme.setFirstName("Payme");
+                payme.setLastName("payme");
+                payme.setEmail("payme");
+                payme.setPassword(passwordEncoder.encode("payme"));
+                payme.setRoles(Collections.singleton(rolePayment));
+                payme.setEnabled(true);
+
+                employeeRepository.save(payme);
+
+
+
 
 
             //SAVE CPECIES_TYPE SAVE //KEYINCHALIK BOSHQA TURLAR HAM QO'SHILISHI MUMKIN MANAGER TOMONIDAN

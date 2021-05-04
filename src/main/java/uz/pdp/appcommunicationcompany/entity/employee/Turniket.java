@@ -27,7 +27,6 @@ public class Turniket {
     @Column(unique = true,nullable = false,updatable = false)
     private String cardNumber;//karta raqam
 
-    @JsonIgnore
     @OneToOne
     private Employee employee;//ishchi id si
 

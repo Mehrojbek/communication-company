@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface SimCardRepository extends JpaRepository<SimCard, UUID> {
     boolean existsByNumber(String number);
+    boolean existsByNumberAndIdNot(String number, UUID id);
     Optional<SimCard> findByNumber(String number);
 }

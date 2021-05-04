@@ -41,16 +41,16 @@ public class Plan {
 
     @JsonIgnore
     @OneToMany(mappedBy = "plan",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Set<DefaultPrice> defaultPrices;//AGAR TARIF BO'YICHA BERILGAN PAKETLAR TUGASA DEFAULT NARXLAR
+    private Set<DefaultPrice> defaultPrices;        //AGAR TARIF BO'YICHA BERILGAN PAKETLAR TUGASA DEFAULT NARXLAR
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private ClientType clientType;                  //QAYSI TURDAGI MIJOZ UCHUN : JISMONIY, YURIDIK, IKKALASI
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Set<ClientType> clientType;     //QAYSI TURDAGI MIJOZ UCHUN
+    private Set<PackageForPlan> packageForPlans;    //TARIF BO'YICHA BERILGAN PAKETLAR //OPTIONAL
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Set<PackageForPlan> packageForPlans;          //TARIF BO'YICHA BERILGAN PAKETLAR //OPTIONAL
-
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private Set<Service> services;          //TARIF BO'YICHA BERILGAN XIZMATLAR //OPTIONAL
+    private Set<Services> services;                  //TARIF BO'YICHA BERILGAN XIZMATLAR //OPTIONAL
 
 
 

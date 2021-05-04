@@ -48,7 +48,7 @@ public class Employee implements UserDetails {
     private Branch branch;//agar bu xodim bo'lsa qaysi filial xodimi
 
     @JsonIgnore
-    @OneToOne(mappedBy = "employee")
+    @OneToOne(mappedBy = "employee",cascade = CascadeType.PERSIST)
     private Turniket turniket;
 
     @ManyToMany
@@ -140,4 +140,6 @@ public class Employee implements UserDetails {
         this.roles = roles;
         this.enabled = enabled;
     }
+
+
 }

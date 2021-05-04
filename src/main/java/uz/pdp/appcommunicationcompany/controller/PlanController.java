@@ -4,9 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uz.pdp.appcommunicationcompany.entity.simcard.Plan;
 import uz.pdp.appcommunicationcompany.payload.ApiResponse;
 import uz.pdp.appcommunicationcompany.payload.PlanDto;
 import uz.pdp.appcommunicationcompany.service.PlanService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/plan")
@@ -17,9 +20,9 @@ public class PlanController {
 
     //GET ALL PLAN LIST
     @GetMapping
-    public HttpEntity<?> getAll(@RequestParam boolean physicalPerson){
-        ApiResponse apiResponse = planService.getAll(physicalPerson);
-        return ResponseEntity.ok(apiResponse);
+    public HttpEntity<?> getAll(){
+        List<Plan> all = planService.getAll();
+        return ResponseEntity.ok(all);
     }
 
 
@@ -36,6 +39,13 @@ public class PlanController {
     public HttpEntity<?> add(@RequestBody PlanDto planDto){
         ApiResponse apiResponse = planService.add(planDto);
         return ResponseEntity.status(apiResponse.isSuccess()?201:409).body(apiResponse);
+    }
+
+
+    @PutMapping("/{id}")
+    public HttpEntity<?> edit(@PathVariable Integer id,@RequestBody PlanDto planDto){
+        ApiResponse apiResponse = planService.edit(id, planDto);
+        return ResponseEntity.status(apiResponse.isSuccess()? 202 : 409).body(apiResponse);
     }
 
 

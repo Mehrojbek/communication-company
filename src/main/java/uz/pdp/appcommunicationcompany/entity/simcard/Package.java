@@ -43,8 +43,8 @@ public class Package {
     private Set<UssdCode> ussdCode;     //SHU PAKETNI UCHUN USSD KOD LAR UCHIRISH, YOQISH,... VA HOKAZO
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<ClientType> clientTypes; //BU PAKET KIM UCHUN JISMONIY, YURIDIK, JISMONIY-YURIDIK
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ClientType clientType; //BU PAKET KIM UCHUN JISMONIY, YURIDIK, JISMONIY-YURIDIK
 
 
 

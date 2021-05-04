@@ -8,9 +8,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import uz.pdp.appcommunicationcompany.entity.employee.Employee;
+import uz.pdp.appcommunicationcompany.entity.employee.ManagerType;
+import uz.pdp.appcommunicationcompany.entity.enums.ManagerTypeEnum;
 import uz.pdp.appcommunicationcompany.entity.enums.RoleNameEnum;
 import uz.pdp.appcommunicationcompany.entity.simcard.SimCard;
 import uz.pdp.appcommunicationcompany.repository.ManagerTypeRepository;
+import uz.pdp.appcommunicationcompany.repository.SimCardRepository;
+
+import java.util.UUID;
 
 @Component
 public class UsefulMethods {
@@ -18,6 +23,8 @@ public class UsefulMethods {
     JavaMailSender javaMailSender;
     @Autowired
     ManagerTypeRepository managerTypeRepository;
+    @Autowired
+    SimCardRepository simCardRepository;
 
     //USERNI ROLINI ANIQLASH
     public byte getRoleNumber() {
@@ -31,8 +38,7 @@ public class UsefulMethods {
                     if (authority.getAuthority().equals(RoleNameEnum.SIM_CARD.name()))
                         return 0;
                 }
-            } catch (Exception e) {
-            }
+            } catch (Exception e) {}
 
             //2----
             try {
@@ -57,7 +63,56 @@ public class UsefulMethods {
 
 
 
+    public boolean isPlanManagerOrDirector(){
+        try {
+            byte roleNumber = getRoleNumber();
+            Employee employee = (Employee)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            ManagerType managerType = employee.getManagerType();
 
+            if ((managerType != null && managerType.getManagerType().equals(ManagerTypeEnum.PLAN_MANAGER.name())) || roleNumber == 4){
+                return true;
+            }
+
+        }catch (Exception e){ }
+        return false;
+    }
+
+
+
+    public boolean isNumberManagerOrDirector(){
+        try {
+            byte roleNumber = getRoleNumber();
+            if (roleNumber == 3 || roleNumber == 4) {
+                Employee employee = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                ManagerType managerType = employee.getManagerType();
+                if ((managerType != null && managerType.getManagerType().equals(ManagerTypeEnum.NUMBER_MANAGER.name())) || roleNumber == 4){
+                    return true;
+                }
+            }
+        }catch (Exception e){}
+        return false;
+    }
+
+
+    public boolean isEmployee(){
+        try {
+            byte roleNumber = getRoleNumber();
+            if (roleNumber == 1 || roleNumber == 2 || roleNumber == 3 || roleNumber == 4) {
+                return true;
+            }
+        }catch (Exception e){}
+        return false;
+    }
+
+
+    public SimCard getSimCardUser(){
+        byte roleNumber = getRoleNumber();
+        if (roleNumber == 0){
+            SimCard simCard = (SimCard) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return simCard;
+        }
+        return null;
+    }
 
 
     //MAIL SENDER

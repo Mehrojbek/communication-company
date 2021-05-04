@@ -1,6 +1,5 @@
 package uz.pdp.appcommunicationcompany.entity.simcard;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -52,7 +51,7 @@ public class SimCard implements UserDetails {
     private Plan plan;                  //TA'RIF REJA
 
     @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Service> services;      //QO'SHIMCHA OLINGAN XIZMATLAR
+    private Set<Services> services;      //QO'SHIMCHA OLINGAN XIZMATLAR
 
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Package> packages;      //QO'SHIMCHA OLINGAN PAKETLAR

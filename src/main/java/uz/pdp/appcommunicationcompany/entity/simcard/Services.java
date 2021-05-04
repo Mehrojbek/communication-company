@@ -20,12 +20,13 @@ import java.util.UUID;
 @Data
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class Service {
+public class Services {
     //QO'SHIMCHA SOTIB OLISH UCHUN XIZMAT
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique = true)
     private String name;//NOMI
 
     private Integer price;//NARXI
@@ -36,7 +37,7 @@ public class Service {
     private ServiceType serviceType;//TURI
 
     @OneToMany
-    private Set<UssdCode> ussdCode; //SHU SERVICE UCHUN USSD CODELAR UCHIRISH, YOQISH ,..VA HOKAZO
+    private Set<UssdCode> ussdCodes; //SHU SERVICE UCHUN USSD CODELAR UCHIRISH, YOQISH ,..VA HOKAZO
 
 
 

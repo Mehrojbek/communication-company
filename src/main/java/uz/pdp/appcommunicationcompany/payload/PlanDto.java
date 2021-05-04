@@ -24,7 +24,7 @@ public class PlanDto {
     private List<DefaultPriceDto> defaultPriceDtoList;      //AGAR TERIF BO'YICHA BERILGAN PAKETLAR TUGASA DEFAULT NARXLAR
 
     @NotNull
-    private List<Integer> clientType;                       //QAYSI TURDAGI MIJOZ UCHUN
+    private Integer clientType;                       //QAYSI TURDAGI MIJOZ UCHUN
 
 
     private List<PackageForPlanDto> packageForPlanDtos;      //TARIF BO'YICHA BERILGAN PAKETLAR //OPTIONAL

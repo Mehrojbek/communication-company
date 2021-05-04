@@ -23,6 +23,7 @@ import uz.pdp.appcommunicationcompany.payload.VerifyDto;
 import uz.pdp.appcommunicationcompany.repository.*;
 import uz.pdp.appcommunicationcompany.security.JwtProvider;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -63,15 +64,16 @@ public class AuthService implements UserDetailsService {
 
         //ADD WORKER // BRANCH_DIRECTOR OR MANAGER OR DIRECTOR
         if ((employeeRole.getName().equals(RoleNameEnum.WORKER)) && (roleNumber == 2 || roleNumber == 3 || roleNumber == 4))
-            return setAllFieldForRegister(employeeRole.getName(),registerDto);
+            return setAllFieldForRegister(employeeRole.getName(),registerDto,employeeRole);
 
         //ADD BRANCH_DIRECTOR // MANAGER OR DIRECTOR
         if ((employeeRole.getName().equals(RoleNameEnum.BRANCH_DIRECTOR)) && (roleNumber == 3 || roleNumber == 4))
-            return setAllFieldForRegister(employeeRole.getName(),registerDto);
+            return setAllFieldForRegister(employeeRole.getName(),registerDto,employeeRole);
 
         //ADD MANAGER  // ONLY DIRECTOR
-        if ((employeeRole.getName().equals(RoleNameEnum.MANAGER)) && roleNumber == 4)
-            return setAllFieldForRegister(employeeRole.getName(),registerDto);
+        if ((employeeRole.getName().equals(RoleNameEnum.MANAGER)) && roleNumber == 4){
+            return setAllFieldForRegister(employeeRole.getName(),registerDto,employeeRole);
+        }
 
         return new ApiResponse("Xatolik",false);
     }
@@ -109,7 +111,7 @@ public class AuthService implements UserDetailsService {
 
 
     //YORDAMCHI METHOD
-    public ApiResponse setAllFieldForRegister(RoleNameEnum roleNameEnum, RegisterDto registerDto ){
+    public ApiResponse setAllFieldForRegister(RoleNameEnum roleNameEnum, RegisterDto registerDto , Role role){
         //UNIKAL XODIM EMAILINI TEKSHIRISH
         boolean exists = employeeRepository.existsByEmail(registerDto.getEmail());
         if (exists)
@@ -146,6 +148,7 @@ public class AuthService implements UserDetailsService {
             employee.setManagerType(managerType);
         }
 
+
         long cardNumber = turniketRepository.count() + 1000_0000_0000_0000l;
 
         //TURNIKET BERISH
@@ -153,8 +156,7 @@ public class AuthService implements UserDetailsService {
         turniket.setCardNumber(String.valueOf(cardNumber));
         turniket.setEmployee(employee);
 
-        employee.setTurniket(turniket);
-
+        employee.setRoles(Collections.singleton(role));
         employeeRepository.save(employee);
 
         //EMAILGA XABAR YUBORISH

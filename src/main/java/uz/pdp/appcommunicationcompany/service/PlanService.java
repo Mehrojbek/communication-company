@@ -4,8 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 import uz.pdp.appcommunicationcompany.component.UsefulMethods;
+import uz.pdp.appcommunicationcompany.entity.Detalizatsiya;
 import uz.pdp.appcommunicationcompany.entity.client.ClientType;
 
+import uz.pdp.appcommunicationcompany.entity.employee.Employee;
+import uz.pdp.appcommunicationcompany.entity.enums.ActionType;
 import uz.pdp.appcommunicationcompany.entity.simcard.*;
 import uz.pdp.appcommunicationcompany.payload.ApiResponse;
 import uz.pdp.appcommunicationcompany.payload.DefaultPriceDto;
@@ -13,6 +16,7 @@ import uz.pdp.appcommunicationcompany.payload.PackageForPlanDto;
 import uz.pdp.appcommunicationcompany.payload.PlanDto;
 import uz.pdp.appcommunicationcompany.repository.*;
 
+import java.sql.Date;
 import java.util.*;
 
 @Service
@@ -31,6 +35,10 @@ public class PlanService {
     ServiceRepository serviceRepository;
     @Autowired
     DefaultPriceRepository defaultPriceRepository;
+    @Autowired
+    SimCardRepository  simCardRepository;
+    @Autowired
+    DetalizatsiyaRepository detalizatsiyaRepository;
 
 
 
@@ -193,5 +201,41 @@ public class PlanService {
                 return new ApiResponse("Muvaffaqiyatli tahrirlandi",true);
         }
         return null;
+    }
+
+
+
+    public ApiResponse setPlan(Integer planId){
+        SimCard simCard = usefulMethods.getSimCard();
+
+        if (simCard != null ){
+            Optional<Plan> optionalPlan = planRepository.findById(planId);
+            if (!optionalPlan.isPresent())
+                return new ApiResponse("tarif reja topilmadi",false);
+            Plan plan = optionalPlan.get();
+
+            Double balance = simCard.getBalance();
+
+            if (balance > (plan.getPrice() + plan.getSwitchPrice()) ){
+                ClientType simCardClientType = simCard.getClient().getClientType();
+                ClientType planClientType = plan.getClientType();
+
+                if ( simCardClientType.equals(planClientType) || planClientType.getId() == 3 ){
+
+                    Detalizatsiya detalizatsiya = new Detalizatsiya();
+                    detalizatsiya.setSimCard(simCard);
+                    detalizatsiya.setActionType(ActionType.SET_PLAN);
+                    detalizatsiya.setSetPlan(plan);
+                    detalizatsiyaRepository.save(detalizatsiya);
+
+                    simCard.setBalance(simCard.getBalance() - (plan.getSwitchPrice() + plan.getPrice()));
+                    simCard.setPlan(plan);
+                    simCard.setActivatedDatePlan(new Date(System.currentTimeMillis()));
+                    simCardRepository.save(simCard);
+                    return new ApiResponse("Tarifga muvaffaqiyatli o'tdingiz",true);
+                }
+            }
+        }
+        return new ApiResponse("Xatolik",false);
     }
 }

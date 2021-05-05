@@ -9,6 +9,7 @@ import uz.pdp.appcommunicationcompany.payload.ApiResponse;
 import uz.pdp.appcommunicationcompany.payload.PackageDto;
 import uz.pdp.appcommunicationcompany.service.PackageService;
 
+import javax.swing.plaf.PanelUI;
 import java.util.List;
 
 @RestController
@@ -51,5 +52,16 @@ public class PackageController {
     public HttpEntity<?> delete(@PathVariable Integer id){
         ApiResponse apiResponse = packageService.delete(id);
         return ResponseEntity.status(apiResponse.isSuccess()?204:409).body(apiResponse);
+    }
+
+
+
+
+
+    //PAKET NI SOTIB OLISH
+    @GetMapping("/buy")
+    public HttpEntity<?> buy(@RequestParam Integer packageId){
+        ApiResponse apiResponse = packageService.buy(packageId);
+        return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 }

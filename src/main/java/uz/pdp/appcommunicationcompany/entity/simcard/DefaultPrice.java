@@ -23,5 +23,6 @@ public class DefaultPrice {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     private PackageType packageType;
 
-    private Integer price;
+    @Column(nullable = false)
+    private Double price;
 }

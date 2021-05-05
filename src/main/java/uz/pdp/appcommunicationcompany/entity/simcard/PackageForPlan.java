@@ -19,7 +19,7 @@ public class PackageForPlan {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer amount;//MIQDORI
+    private Double amount;                 //MIQDORI
 
     @ManyToOne(optional = false)
     private PackageType packageType;        //PAKET TURI : MB, SMS, MINUTE

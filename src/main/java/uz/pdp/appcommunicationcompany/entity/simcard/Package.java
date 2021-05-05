@@ -28,7 +28,7 @@ public class Package {
     private Integer id;
 
     @Column(nullable = false)
-    private Integer amount;//MIQDORI
+    private Double amount;//MIQDORI
 
     @Column(nullable = false)
     private Integer duration;//MUDDATI
@@ -48,6 +48,8 @@ public class Package {
 
 
 
+//    @Transient
+//    private boolean
 
 
 

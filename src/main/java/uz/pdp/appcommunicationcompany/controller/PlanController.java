@@ -10,6 +10,7 @@ import uz.pdp.appcommunicationcompany.payload.PlanDto;
 import uz.pdp.appcommunicationcompany.service.PlanService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/plan")
@@ -35,7 +36,7 @@ public class PlanController {
 
 
     //ADD PLAN
-    @PostMapping("/add")
+    @PostMapping
     public HttpEntity<?> add(@RequestBody PlanDto planDto){
         ApiResponse apiResponse = planService.add(planDto);
         return ResponseEntity.status(apiResponse.isSuccess()?201:409).body(apiResponse);
@@ -46,6 +47,15 @@ public class PlanController {
     public HttpEntity<?> edit(@PathVariable Integer id,@RequestBody PlanDto planDto){
         ApiResponse apiResponse = planService.edit(id, planDto);
         return ResponseEntity.status(apiResponse.isSuccess()? 202 : 409).body(apiResponse);
+    }
+
+
+
+    //PLANGA ULANISH
+    @GetMapping("/setPlan")
+    public HttpEntity<?> setPlan(@RequestParam Integer planId){
+        ApiResponse apiResponse = planService.setPlan(planId);
+        return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 
 

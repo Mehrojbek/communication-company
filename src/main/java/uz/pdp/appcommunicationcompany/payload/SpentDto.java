@@ -3,14 +3,16 @@ package uz.pdp.appcommunicationcompany.payload;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.UUID;
 
 @Data
-public class PackageForPlanDto {
+public class SpentDto {
+    @NotNull
+    private UUID simCardId;
+
     @NotNull
     private Double amount;
 
     @NotNull
-    private Integer packageTypeId;
-
+    private String packageType;
 }

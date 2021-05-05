@@ -31,16 +31,6 @@ public class Payment {
 
 
 
-
-
-
-
-
-
-
-
-
-
     @Column(updatable = false)
     @CreationTimestamp
     private Timestamp createdAt;

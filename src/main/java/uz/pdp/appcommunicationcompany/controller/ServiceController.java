@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import uz.pdp.appcommunicationcompany.entity.simcard.Services;
 import uz.pdp.appcommunicationcompany.payload.ApiResponse;
 import uz.pdp.appcommunicationcompany.payload.ServiceDto;
-import uz.pdp.appcommunicationcompany.service.ServiceService;
+import uz.pdp.appcommunicationcompany.service.ServiceForService;
 
 import java.util.List;
 
@@ -15,12 +15,12 @@ import java.util.List;
 @RequestMapping("/api/service")
 public class ServiceController {
     @Autowired
-    ServiceService serviceService;
+    ServiceForService serviceForService;
 
 
     @GetMapping
     public HttpEntity<?> getAll(){
-        List<Services> services = serviceService.getAll();
+        List<Services> services = serviceForService.getAll();
         return ResponseEntity.ok(services);
     }
 
@@ -28,7 +28,7 @@ public class ServiceController {
 
     @GetMapping("/{id}")
     public HttpEntity<?> getOne(@PathVariable Integer id){
-        ApiResponse apiResponse = serviceService.getOne(id);
+        ApiResponse apiResponse = serviceForService.getOne(id);
         return ResponseEntity.status(apiResponse.isSuccess()?200:401).body(apiResponse);
     }
 
@@ -36,21 +36,28 @@ public class ServiceController {
 
     @PostMapping
     public HttpEntity<?> add(@RequestBody ServiceDto serviceDto){
-        ApiResponse apiResponse = serviceService.add(serviceDto);
+        ApiResponse apiResponse = serviceForService.add(serviceDto);
         return ResponseEntity.status(apiResponse.isSuccess()?201:409).body(apiResponse);
     }
 
 
     @PutMapping("/{id}")
     public HttpEntity<?> edit(@PathVariable Integer id, @RequestBody ServiceDto serviceDto){
-        ApiResponse apiResponse = serviceService.edit(id, serviceDto);
+        ApiResponse apiResponse = serviceForService.edit(id, serviceDto);
         return ResponseEntity.status(apiResponse.isSuccess()?202:409).body(apiResponse);
     }
 
 
     @DeleteMapping("/{id}")
     public HttpEntity<?> delete(@PathVariable Integer id){
-        ApiResponse apiResponse = serviceService.delete(id);
+        ApiResponse apiResponse = serviceForService.delete(id);
         return ResponseEntity.status(apiResponse.isSuccess()?204:409).body(apiResponse);
+    }
+
+
+    @GetMapping
+    public HttpEntity<?> buy(@RequestParam Integer serviceId){
+        ApiResponse apiResponse = serviceForService.buy(serviceId);
+        return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);
     }
 }

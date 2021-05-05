@@ -1,5 +1,6 @@
 package uz.pdp.appcommunicationcompany.entity.simcard;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,9 @@ import uz.pdp.appcommunicationcompany.entity.client.Client;
 import uz.pdp.appcommunicationcompany.entity.employee.Branch;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
@@ -50,12 +53,19 @@ public class SimCard implements UserDetails {
     @ManyToOne(fetch = FetchType.LAZY,optional = false)
     private Plan plan;                  //TA'RIF REJA
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Services> services;      //QO'SHIMCHA OLINGAN XIZMATLAR
+    @JsonIgnore
+    @OneToMany(mappedBy = "simCard",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Set<SimCardServices> services;      //QO'SHIMCHA OLINGAN XIZMATLAR
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Package> packages;      //QO'SHIMCHA OLINGAN PAKETLAR
+    @JsonIgnore
+    @OneToMany(mappedBy = "simCard",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private Set<SimCardPackage> packages;      //QO'SHIMCHA OLINGAN PAKETLAR
 
+    @Column(nullable = false)
+    private Date activatedDatePlan;     //TARIF REJANI FAOLLASHTIRILGAN VAQTI
+
+    @Transient
+    private boolean isExpiredPlan;      //TARIF REJASINI MUDDATI TUGADIMI
 
 
     @Column(nullable = false)
@@ -131,5 +141,13 @@ public class SimCard implements UserDetails {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+
+
+    public boolean isExpiredPlan() {
+        LocalDate date = activatedDatePlan.toLocalDate().plusDays(plan.getDuration());
+        boolean before = date.isBefore(LocalDate.now());
+        return before;
     }
 }

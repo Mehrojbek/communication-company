@@ -10,5 +10,5 @@ public class DefaultPriceDto {
     private Integer packageTypeId;
 
     @NotNull
-    private Integer price;
+    private Double price;
 }

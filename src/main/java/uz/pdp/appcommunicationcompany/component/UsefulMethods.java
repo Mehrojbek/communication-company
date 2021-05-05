@@ -78,7 +78,6 @@ public class UsefulMethods {
     }
 
 
-
     public boolean isNumberManagerOrDirector(){
         try {
             byte roleNumber = getRoleNumber();
@@ -105,11 +104,54 @@ public class UsefulMethods {
     }
 
 
-    public SimCard getSimCardUser(){
+    public Employee getEmployee(){
+        byte roleNumber = getRoleNumber();
+        if (roleNumber == 1 || roleNumber == 2 || roleNumber == 3 || roleNumber == 4){
+            Employee employee = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return employee;
+        }
+        return null;
+    }
+
+
+    public Employee getBranchDirectorOrDirector(){
+        byte roleNumber = getRoleNumber();
+        if (roleNumber == 2 || roleNumber == 4){
+            Employee employee = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return employee;
+        }
+        return null;
+    }
+
+
+    public SimCard getSimCard(){
         byte roleNumber = getRoleNumber();
         if (roleNumber == 0){
             SimCard simCard = (SimCard) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             return simCard;
+        }
+        return null;
+    }
+
+
+    public Employee getPaymentUser(){
+        byte roleNumber = getRoleNumber();
+        if (roleNumber == 10){
+            Employee employee = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return employee;
+        }
+        return null;
+    }
+
+
+    public Employee getNumberManagerOrDirector(){
+        byte roleNumber = getRoleNumber();
+        if (roleNumber == 3 || roleNumber == 4){
+            Employee employee = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            ManagerType managerType = employee.getManagerType();
+            if ((managerType != null && managerType.getManagerType().equals(ManagerTypeEnum.NUMBER_MANAGER.name())) || roleNumber == 4){
+               return employee;
+            }
         }
         return null;
     }

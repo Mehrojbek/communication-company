@@ -8,7 +8,7 @@ import java.util.*;
 @Data
 public class PackageDto {
     @NotNull
-    private Integer amount;
+    private Double amount;
     @NotNull
     private Integer duration;
     @NotNull

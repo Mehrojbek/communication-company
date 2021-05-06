@@ -62,17 +62,16 @@ public class SimCard implements UserDetails {
     private Set<SimCardPackage> packages;      //QO'SHIMCHA OLINGAN PAKETLAR
 
     @Column(nullable = false)
-    private Date activatedDatePlan;     //TARIF REJANI FAOLLASHTIRILGAN VAQTI
+    private Date activatedDatePlan;         //TARIF REJANI FAOLLASHTIRILGAN VAQTI
 
     @Transient
-    private boolean isExpiredPlan;      //TARIF REJASINI MUDDATI TUGADIMI
-
+    private boolean isExpiredPlan;          //TARIF REJASINI MUDDATI TUGADIMI
 
     @Column(nullable = false)
-    private String password;            //BU SIM KARTA HAM TIZIMGA KIRA OLISHI UCHUN
+    private String password;                //BU SIM KARTA HAM TIZIMGA KIRA OLISHI UCHUN
 
     @ManyToMany
-    private Set<Role> roles;            //ROL SIM_CARD
+    private Set<Role> roles;                //ROL SIM_CARD
 
 
     private boolean accountNonExpired=true;

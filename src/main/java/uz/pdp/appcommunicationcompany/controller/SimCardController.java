@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uz.pdp.appcommunicationcompany.entity.Detalizatsiya;
 import uz.pdp.appcommunicationcompany.entity.simcard.SimCard;
 import uz.pdp.appcommunicationcompany.payload.ApiResponse;
 import uz.pdp.appcommunicationcompany.payload.SimcardDto;
@@ -33,6 +34,7 @@ public class SimCardController {
     }
 
 
+
     @PostMapping
     public HttpEntity<?> add(@RequestBody SimcardDto simcardDto){
         ApiResponse apiResponse = simCardService.add(simcardDto);
@@ -54,5 +56,12 @@ public class SimCardController {
         return ResponseEntity.status(apiResponse.isSuccess()?204:409).body(apiResponse);
     }
 
+
+
+    @GetMapping("/detalizatsiya")
+    public HttpEntity<?> detalizatsiya(){
+        List<Detalizatsiya> detalizatsiyaList = simCardService.getAllDetalizatsiya();
+        return ResponseEntity.ok(detalizatsiyaList);
+    }
 
 }

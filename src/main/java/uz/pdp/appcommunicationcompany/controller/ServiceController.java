@@ -55,7 +55,7 @@ public class ServiceController {
     }
 
 
-    @GetMapping
+    @GetMapping("/buy")
     public HttpEntity<?> buy(@RequestParam Integer serviceId){
         ApiResponse apiResponse = serviceForService.buy(serviceId);
         return ResponseEntity.status(apiResponse.isSuccess()?200:409).body(apiResponse);

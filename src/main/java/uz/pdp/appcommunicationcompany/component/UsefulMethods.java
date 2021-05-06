@@ -124,6 +124,25 @@ public class UsefulMethods {
     }
 
 
+    public Employee getBranchDirector(){
+        byte roleNumber = getRoleNumber();
+        if (roleNumber == 2){
+            Employee employee = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return employee;
+        }
+        return null;
+    }
+
+    public Employee getDirector(){
+        byte roleNumber = getRoleNumber();
+        if (roleNumber == 4){
+            Employee employee = (Employee) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            return employee;
+        }
+        return null;
+    }
+
+
     public SimCard getSimCard(){
         byte roleNumber = getRoleNumber();
         if (roleNumber == 0){

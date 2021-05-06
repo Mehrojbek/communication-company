@@ -19,6 +19,9 @@ public class SimcardDto {
     private ClientDto clientDto;
 
     @NotNull
+    private Integer branchId;
+
+    @NotNull
     private Integer codeId;
 
     @NotNull
